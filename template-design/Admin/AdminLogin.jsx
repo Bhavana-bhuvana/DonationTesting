@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import config from "../src/config";
 
 const AdminLogin = () => {
   const [passkey, setPasskey] = useState("");
@@ -8,13 +9,14 @@ const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:8080/api/auth/admin", {
+      const res = await axios.post(`${config.API_URL}/api/auth/admin`, {
         passkey,
       });
 

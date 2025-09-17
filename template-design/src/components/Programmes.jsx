@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import config from "../config";
 
 const Programmes = () => {
   const [programmes, setProgrammes] = useState([]);
@@ -12,7 +13,7 @@ const Programmes = () => {
   // Fetch all programmes
   const fetchProgrammes = () => {
     axios
-      .get("http://localhost:8080/api/programmes")
+      .get(`${config.API_URL}/api/programmes`)
       .then((res) => {
         setProgrammes(res.data);
         setLoading(false);
@@ -30,7 +31,7 @@ const Programmes = () => {
   // Save edited programme
   const handleSave = async (prog) => {
     try {
-      await axios.put(`http://localhost:8080/api/programmes/${prog._id}`, {
+      await axios.put(`${config.API_URL}/api/programmes/${prog._id}`, {
         title: prog.title,
         description: prog.description,
         color: prog.color,
@@ -54,7 +55,7 @@ const Programmes = () => {
 
     try {
       await axios.post(
-        `http://localhost:8080/api/programmes/${prog._id}/upload-icon`,
+        `${config.API_URL}/api/programmes/${prog._id}/upload-icon`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -70,7 +71,7 @@ const Programmes = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this programme?")) return;
     try {
-      await axios.delete(`http://localhost:8080/api/programmes/${id}`);
+      await axios.delete(`${config.API_URL}/api/programmes/${id}`);
       fetchProgrammes();
       alert("Programme deleted!");
     } catch (err) {
@@ -87,7 +88,7 @@ const Programmes = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:8080/api/programmes", {
+      const res = await axios.post(`${config.API_URL}/api/programmes`, {
         title: newProg.title,
         description: newProg.description,
         color: newProg.color,
@@ -98,7 +99,7 @@ const Programmes = () => {
       if (newProg.icon) {
         const formData = new FormData();
         formData.append("file", newProg.icon);
-        await axios.post(`http://localhost:8080/api/programmes/${createdProg._id}/upload-icon`, formData, {
+        await axios.post(`${config.API_URL}/api/programmes/${createdProg._id}/upload-icon`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }
@@ -169,7 +170,7 @@ const Programmes = () => {
             ) : (
               <>
                 <img
-                  src={prog.icon ? `http://localhost:8080/uploads/icons/${prog.icon}` : "https://via.placeholder.com/56"}
+                  src={prog.icon ? `${config.API_URL}/uploads/icons/${prog.icon}` : "https://via.placeholder.com/56"}
                   alt={prog.title}
                   className="w-14 h-14 object-contain mb-2"
                 />

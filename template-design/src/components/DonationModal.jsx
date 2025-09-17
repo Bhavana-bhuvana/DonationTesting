@@ -5,9 +5,11 @@ import { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
+import config from "../config";
 
-const API_BASE = "http://localhost:8080/api";
+
 function DonationModal() {
+const API_BASE = `${config.API_URL}/api`;
   const [frequency, setFrequency] = useState("monthly");
   const [amount, setAmount] = useState("");
   const [customAmount, setCustomAmount] = useState("");
@@ -395,10 +397,11 @@ function DonationModal() {
           <p>No donations from corporations or government entities.</p>
           <p>We accept only digital/cheque donations, never cash.</p>
         </div>
-      </div>  
-
-    </div>
+      </div> 
+    </div> 
   );
+  
+  
   
 }
 

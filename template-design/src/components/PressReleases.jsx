@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import config from "../config";
 
 const PressReleases = () => {
   const [pressReleases, setPressReleases] = useState([]);
@@ -20,7 +21,7 @@ const PressReleases = () => {
   // Fetch all press releases
   const fetchPressReleases = () => {
     axios
-      .get("http://localhost:8080/api/press-releases")
+      .get(`${config.API_URL}/api/press-releases`)
       .then((res) => {
         setPressReleases(res.data);
         setLoading(false);
@@ -38,7 +39,7 @@ const PressReleases = () => {
   // Update text fields only
   const handleSave = async (release) => {
     try {
-      await axios.put(`http://localhost:8080/api/press-releases/${release.id}`, {
+      await axios.put(`${config.API_URL}/api/press-releases/${release.id}`, {
         title: release.title,
         excerpt: release.excerpt,
         date: release.date,
@@ -62,7 +63,7 @@ const PressReleases = () => {
 
     try {
       await axios.post(
-        `http://localhost:8080/api/press-releases/${release.id}/upload-image`,
+        `${config.API_URL}/api/press-releases/${config.API_URL}/upload-image`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -79,7 +80,7 @@ const PressReleases = () => {
     if (!window.confirm("Are you sure you want to delete this press release?")) return;
 
     try {
-      await axios.delete(`http://localhost:8080/api/press-releases/${id}`);
+      await axios.delete(`${config.API_URL}/api/press-releases/${id}`);
       fetchPressReleases();
       alert("Press release deleted!");
     } catch (err) {
@@ -97,7 +98,7 @@ const PressReleases = () => {
 
     try {
       // 1️⃣ Create release with text only
-      const res = await axios.post("http://localhost:8080/api/press-releases", {
+      const res = await axios.post(`${config.API_URL}/api/press-releases`, {
         title: newRelease.title,
         excerpt: newRelease.excerpt,
         date: newRelease.date,
@@ -110,7 +111,7 @@ const PressReleases = () => {
         const formData = new FormData();
         formData.append("file", newRelease.image);
         await axios.post(
-          `http://localhost:8080/api/press-releases/${created.id}/upload-image`,
+          `${config.API_URL}/api/press-releases/${created.id}/upload-image`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
@@ -148,7 +149,7 @@ const PressReleases = () => {
               <img
                 src={
                   release.imageUrl
-                    ? `http://localhost:8080/uploads/press-releases/${release.imageUrl}`
+                    ? `${config.API_URL}/uploads/press-releases/${release.imageUrl}`
                     : "https://via.placeholder.com/300x200?text=No+Image"
                 }
                 alt={release.title}

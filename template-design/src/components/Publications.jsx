@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import config from "../config";
 
 const Publications = () => {
   const [publications, setPublications] = useState([]);
@@ -8,7 +9,8 @@ const Publications = () => {
   const [editingPub, setEditingPub] = useState(null);
   const [newPub, setNewPub] = useState({ title: "", description: "", image: null });
 
-  // ✅ initialize from localStorage instead of useEffect
+
+  //  initialize from localStorage instead of useEffect
   const [isAdmin] = useState(() => {
     return localStorage.getItem("isAdmin") === "true";
   });
@@ -18,7 +20,7 @@ const Publications = () => {
   // Fetch publications from backend
   const fetchPublications = () => {
     axios
-      .get("http://localhost:8080/api/publications")
+      .get(`${config.API_URL}/api/publications`)
       .then((res) => {
         setPublications(res.data);
         setLoading(false);
@@ -36,11 +38,11 @@ const Publications = () => {
   // Save edited publication
   const handleSave = async (pub) => {
     try {
-      await axios.put(`http://localhost:8080/api/publications/${pub.id}`, {
+      await axios.put(`${config.API_URL}/api/publications/${pub.id}`, {
         title: pub.title,
         description: pub.description,
       });
-      fetchPublications(); // ✅ refresh
+      fetchPublications(); //  refresh
       setEditingPub(null);
       alert("Publication updated!");
     } catch (err) {
@@ -59,12 +61,12 @@ const Publications = () => {
 
     try {
       await axios.post(
-        `http://localhost:8080/api/publications/${pub.id}/upload-image`,
+        `${config.API_URL}/api/publications/${pub.id}/upload-image`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
 
-      fetchPublications(); // ✅ refresh
+      fetchPublications(); //  refresh
       alert("Image uploaded!");
     } catch (err) {
       console.error("Image upload failed:", err);
@@ -77,7 +79,7 @@ const Publications = () => {
     if (!window.confirm("Are you sure you want to delete this publication?")) return;
 
     try {
-      await axios.delete(`http://localhost:8080/api/publications/${id}`);
+      await axios.delete(`${config.API_URL}/api/publications/${id}`);
       fetchPublications(); // ✅ refresh
       alert("Publication deleted!");
     } catch (err) {
@@ -95,7 +97,7 @@ const Publications = () => {
 
     try {
       // 1. Create publication (title + description only)
-      const res = await axios.post("http://localhost:8080/api/publications", {
+      const res = await axios.post(`${config.API_URL}/api/publications`, {
         title: newPub.title,
         description: newPub.description,
       });
@@ -108,7 +110,7 @@ const Publications = () => {
         formData.append("file", newPub.image);
 
         await axios.post(
-          `http://localhost:8080/api/publications/${createdPub.id}/upload-image`,
+          `${config.API_URL}/api/publications/${createdPub.id}/upload-image`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
@@ -156,7 +158,7 @@ const Publications = () => {
               <img
                 src={
                   pub.imageUrl
-                    ? `http://localhost:8080/uploads/publications/${pub.imageUrl}`
+                    ? `${config.API_URL}/uploads/publications/${pub.imageUrl}`
                     : "https://via.placeholder.com/300x200?text=No+Image"
                 }
                 alt={pub.title}

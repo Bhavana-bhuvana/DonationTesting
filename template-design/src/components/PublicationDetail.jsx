@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import config from "../config";
 
 const PublicationDetail = () => {
-  const { id } = useParams(); // ✅ get publication id from URL
+  const { id } = useParams(); //  get publication id from URL
   const [publication, setPublication] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/publications/${_id}`) // ✅ fetch single publication
+      .get(`${config.API_URL}/api/publications/${_id}`) //  fetch single publication
       .then((res) => {
         setPublication(res.data);
         setLoading(false);
@@ -38,7 +39,7 @@ const PublicationDetail = () => {
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden max-w-4xl mx-auto">
         {/* Image */}
         <img
-          src={`http://localhost:8080/uploads/publications/${publication.imageUrl}`}
+          src={`${config.API_URL}/uploads/publications/${publication.imageUrl}`}
           alt={publication.title}
           className="w-full h-80 object-cover"
         />

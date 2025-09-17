@@ -107,9 +107,9 @@ const Navbar = () => {
         >
           <div className="container mx-auto flex justify-between items-center h-full">
             {/* logo */}
-            <div>
+            <div className="flex items-center">
               <a href="/">
-                <img src="/logo.png" alt="logo" />
+                <img src="logo.png" alt="logo" className="h-12 w-auto object-contain" />
               </a>
             </div>
 
